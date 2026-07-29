@@ -1,6 +1,9 @@
 /**
  * Production static server for Onecall Solution (PM2).
- * Serves .output/public — run `npm run build` before starting.
+ * Serves public/site as the domain root so relative assets
+ * (styles.css, img/*, script.js) resolve at https://domain/...
+ *
+ * Run `npm run build` before starting.
  */
 import http from "node:http";
 import fs from "node:fs";
@@ -8,7 +11,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PUBLIC_DIR = path.join(__dirname, ".output", "public");
+const BUILD_PUBLIC = path.join(__dirname, ".output", "public");
+const SITE_DIR = path.join(BUILD_PUBLIC, "site");
 const PORT = Number(process.env.PORT || 3016);
 const HOST = process.env.HOST || "0.0.0.0";
 
@@ -37,12 +41,9 @@ function send(res, status, body, headers = {}) {
   res.end(body);
 }
 
-function resolveFile(urlPath) {
-  let pathname = decodeURIComponent((urlPath || "/").split("?")[0]);
-  if (pathname === "/") pathname = "/site/index.html";
-
-  const root = path.resolve(PUBLIC_DIR);
-  let filePath = path.resolve(path.join(PUBLIC_DIR, pathname));
+function tryFile(rootDir, pathname) {
+  const root = path.resolve(rootDir);
+  let filePath = path.resolve(path.join(rootDir, pathname));
   if (!filePath.startsWith(root)) return null;
 
   if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
@@ -52,13 +53,34 @@ function resolveFile(urlPath) {
   return filePath;
 }
 
-if (!fs.existsSync(PUBLIC_DIR)) {
-  console.error(`[onecall] Missing ${PUBLIC_DIR}. Run: npm run build`);
+function resolveFile(urlPath) {
+  let pathname = decodeURIComponent((urlPath || "/").split("?")[0]);
+  if (pathname === "/") pathname = "/index.html";
+
+  // Prefer site root so /styles.css and /img/* work at the domain root
+  let file = tryFile(SITE_DIR, pathname);
+  if (file) return file;
+
+  // Back-compat: /site/... still works
+  if (pathname === "/site" || pathname === "/site/") {
+    return tryFile(SITE_DIR, "/index.html");
+  }
+  if (pathname.startsWith("/site/")) {
+    file = tryFile(SITE_DIR, pathname.slice("/site".length));
+    if (file) return file;
+  }
+
+  // React build assets / favicon from .output/public
+  return tryFile(BUILD_PUBLIC, pathname);
+}
+
+if (!fs.existsSync(SITE_DIR)) {
+  console.error(`[onecall] Missing ${SITE_DIR}. Run: npm run build`);
 }
 
 const server = http.createServer((req, res) => {
   try {
-    if (!fs.existsSync(PUBLIC_DIR)) {
+    if (!fs.existsSync(SITE_DIR)) {
       return send(
         res,
         503,

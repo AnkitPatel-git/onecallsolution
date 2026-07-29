@@ -65,12 +65,12 @@
   ];
 
   var services = [
-    ["network", "Network infrastructure", "Outcome: reliable connectivity sized for users, applications and sites.", "Topology design, switching/routing, campus Wi‑Fi, structured cabling, documentation and handover."],
-    ["lock", "Cyber & network security", "Outcome: controlled perimeter and access aligned to your policy baseline.", "Firewall deployment, VPN, endpoint security coordination, hardening guidance and change documentation."],
-    ["camera", "Physical security systems", "Outcome: integrated CCTV and access layers with operable day-2 support.", "Camera/NVR design, access control, barriers/turnstiles, commissioning and operator training."],
-    ["cloud", "Cloud & productivity", "Outcome: stable identity and collaboration platforms with clean migration.", "Microsoft 365 / Google Workspace rollout, email migration, cloud backup and tenant hygiene basics."],
-    ["database", "Data centre & continuity", "Outcome: resilient compute/storage footing and recovery planning.", "Server/storage build, rack integration, backup design and disaster-recovery planning workshops."],
-    ["headset", "Managed IT & AMC", "Outcome: predictable operations cost with a named escalation path.", "Helpdesk coordination, remote/onsite support, hardware AMC, asset tracking and OEM escalation."]
+    ["img/networking.jpg", "Network infrastructure", "Design, Wi‑Fi, switching and cabling with handover docs."],
+    ["img/security.jpg", "Cyber & network security", "Firewall, VPN and access baselines with change records."],
+    ["img/security.jpg", "Physical security systems", "CCTV, access control and commissioning support."],
+    ["img/datacenter.jpg", "Data centre & continuity", "Server/storage builds and backup planning."],
+    ["img/support.jpg", "Managed IT & AMC", "Helpdesk, onsite break-fix and OEM escalation."],
+    ["img/networking.jpg", "Cloud & productivity", "M365 / Workspace rollout and clean migrations."]
   ];
 
   var industries = [
@@ -112,8 +112,7 @@
   }).join(""));
 
   html("serviceList", services.map(function (s) {
-    return '<article class="service-pro reveal">' + icon(s[0]) +
-      "<div><h3>" + s[1] + "</h3><p class=\"service-pro__outcome\">" + s[2] + "</p><p>" + s[3] + "</p></div></article>";
+    return '<article class="service-tile reveal"><img src="' + s[0] + '" alt="" loading="lazy" /><div class="service-tile__shade"></div><div class="service-tile__body"><h3>' + s[1] + "</h3><p>" + s[2] + "</p></div></article>";
   }).join(""));
 
   html("industryGrid", industries.map(function (i) {

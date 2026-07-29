@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.join(__dirname, ".output", "public");
-const PORT = Number(process.env.PORT || 3015);
+const PORT = Number(process.env.PORT || 3016);
 const HOST = process.env.HOST || "0.0.0.0";
 
 const MIME = {

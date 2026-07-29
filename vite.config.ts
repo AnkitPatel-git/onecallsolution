@@ -12,6 +12,10 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Node/Passenger (cPanel) production target
+  nitro: {
+    preset: "node-server",
+  },
   vite: {
     server: {
       // Allow ngrok tunnels (host changes each session)

@@ -1,0 +1,10 @@
+# Passenger / Node app document-root helper
+# If cPanel did not inject Passenger lines into public_html/.htaccess,
+# ask your host to re-register the app, OR paste the CloudLinux block
+# that Application Manager generates (do not invent paths).
+#
+# Your Application Path MUST be: onecallsolution  (NOT /)
+# Then Restart the application after npm run build.
+
+DirectoryIndex index.html
+Options -Indexes

@@ -1,20 +1,110 @@
 /**
- * cPanel / Phusion Passenger startup file (must be named app.js).
+ * cPanel / Phusion Passenger startup file.
+ * Serves the production build from .output/public (full source stays on disk).
  *
- * Deploy:
- * 1. Upload full project to ~/onecallsolution (or similar)
- * 2. In cPanel → Setup Node.js App / Application Manager:
- *    Application Path = onecallsolution
- *    Application URL  = onecallsolution.in (or /)
- *    Environment      = Production
- *    Node.js version  = 22.x (required: >= 22.12)
- * 3. Run: npm install && npm run build
- * 4. Restart the application
+ * Required: npm run build  (creates .output/public)
+ * Restart the Node app in cPanel after every deploy.
  */
-/* global PhusionPassenger */
+import http from "node:http";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
+/* global PhusionPassenger */
 if (typeof PhusionPassenger !== "undefined") {
   PhusionPassenger.configure({ autoInstall: false });
 }
 
-await import("./.output/server/index.mjs");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const PUBLIC_DIR = path.join(__dirname, ".output", "public");
+
+const MIME = {
+  ".html": "text/html; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
+  ".mjs": "text/javascript; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".gif": "image/gif",
+  ".svg": "image/svg+xml",
+  ".ico": "image/x-icon",
+  ".webp": "image/webp",
+  ".txt": "text/plain; charset=utf-8",
+  ".xml": "application/xml; charset=utf-8",
+  ".woff": "font/woff",
+  ".woff2": "font/woff2",
+  ".map": "application/json; charset=utf-8",
+};
+
+function send(res, status, body, headers = {}) {
+  res.writeHead(status, headers);
+  res.end(body);
+}
+
+function resolveFile(urlPath) {
+  let pathname = decodeURIComponent((urlPath || "/").split("?")[0]);
+  if (pathname === "/") pathname = "/site/index.html";
+
+  const root = path.resolve(PUBLIC_DIR);
+  let filePath = path.resolve(path.join(PUBLIC_DIR, pathname));
+  if (!filePath.startsWith(root)) return null;
+
+  if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+    filePath = path.join(filePath, "index.html");
+  }
+  if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) return null;
+  return filePath;
+}
+
+if (!fs.existsSync(PUBLIC_DIR)) {
+  console.error(
+    `[onecall] Missing ${PUBLIC_DIR}. Run: npm run build`,
+  );
+}
+
+const server = http.createServer((req, res) => {
+  try {
+    if (!fs.existsSync(PUBLIC_DIR)) {
+      return send(
+        res,
+        503,
+        "App build missing. SSH in and run: cd ~/onecallsolution && npm run build",
+        { "Content-Type": "text/plain; charset=utf-8" },
+      );
+    }
+
+    const filePath = resolveFile(req.url || "/");
+    if (!filePath) {
+      return send(res, 404, "Not Found", {
+        "Content-Type": "text/plain; charset=utf-8",
+      });
+    }
+
+    const body = fs.readFileSync(filePath);
+    const type = MIME[path.extname(filePath).toLowerCase()] || "application/octet-stream";
+    return send(res, 200, body, {
+      "Content-Type": type,
+      "Content-Length": body.length,
+      "Cache-Control": path.extname(filePath) === ".html" ? "no-cache" : "public, max-age=86400",
+    });
+  } catch (error) {
+    console.error(error);
+    return send(res, 500, "Internal Server Error", {
+      "Content-Type": "text/plain; charset=utf-8",
+    });
+  }
+});
+
+const isPassenger = typeof PhusionPassenger !== "undefined";
+const port = process.env.PORT || process.env.NITRO_PORT || 3000;
+
+if (isPassenger) {
+  // Classic cPanel Passenger socket — required or Apache returns 403/502
+  server.listen("passenger");
+} else {
+  server.listen(port, () => {
+    console.log(`[onecall] listening on http://127.0.0.1:${port}`);
+  });
+}

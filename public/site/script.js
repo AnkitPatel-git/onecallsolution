@@ -2,14 +2,12 @@
 (function () {
   "use strict";
 
-  /* ---------- Inline icon set (stroke SVG, lucide-style) ---------- */
   var P = {
     shield: '<path d="M12 3l7 3v6c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6z"/>',
     globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 010 18a15 15 0 010-18"/>',
     badge: '<circle cx="12" cy="9" r="5"/><path d="M8.5 13L7 21l5-2.5L17 21l-1.5-8"/>',
     server: '<rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/>',
     zap: '<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',
-    tag: '<path d="M3 12l9-9 9 9-9 9z"/><circle cx="12" cy="8" r="1.4"/>',
     check: '<path d="M20 6L9 17l-5-5"/>',
     clipboard: '<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4h6v3H9z"/><path d="M9 12h6M9 16h4"/>',
     wrench: '<path d="M15 3a6 6 0 00-5.6 8.2L3 17.6 6.4 21l6.4-6.4A6 6 0 1015 3z"/>',
@@ -36,77 +34,43 @@
     factory: '<path d="M3 21V10l5 3V10l5 3V7l6 4v10z"/>',
     cart: '<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.5 12h11L21 7H6"/>',
     gov: '<path d="M3 10l9-6 9 6"/><path d="M5 10v9M10 10v9M14 10v9M19 10v9M3 21h18"/>',
-    pill: '<rect x="3" y="8" width="18" height="8" rx="4"/><path d="M12 8v8"/>',
     users: '<circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0112 0"/><path d="M16 5.5a3.2 3.2 0 010 6.4M17 20a6 6 0 00-2-4.4"/>',
     briefcase: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5h6v2M3 12h18"/>',
-    move: '<path d="M4 12h12M13 8l4 4-4 4"/><rect x="18" y="4" width="3" height="16" rx="1"/>'
+    tag: '<path d="M3 12l9-9 9 9-9 9z"/><circle cx="12" cy="8" r="1.4"/>',
+    pill: '<rect x="3" y="8" width="18" height="8" rx="4"/><path d="M12 8v8"/>'
   };
 
   function icon(name) {
     return '<span class="card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (P[name] || P.check) + "</svg></span>";
   }
 
-  /* ---------- Data ---------- */
   var why = [
-    ["layers", "Complete End-to-End IT Solutions", "Procurement, design, deployment and support from one accountable partner."],
-    ["globe", "PAN India Service & Support", "Franchise and partner network reaching 16,000+ pin codes across India."],
-    ["badge", "Certified Technical Experts", "OEM-certified engineers for networking, security, servers and AV."],
-    ["server", "Enterprise IT Infrastructure", "Server, storage, data centre and smart rack solutions built to scale."],
-    ["zap", "Fast Response Time", "Smart dispatch allocates tickets by engineer proximity and skill set."],
-    ["tag", "Competitive Pricing", "Transparent commercials backed by strong distribution relationships."],
-    ["check", "Genuine OEM Products", "Only authentic, warranty-backed hardware from authorised channels."],
-    ["clipboard", "Professional Project Management", "Dedicated managers, structured rollouts and clear reporting."],
-    ["wrench", "Annual Maintenance Contracts (AMC)", "AMC for switches, routers, firewalls, printers, laptops and servers."],
-    ["headset", "Dedicated Customer Support", "Central control hub for ticketing, escalation and client reporting."],
-    ["settings", "Customised Business Solutions", "Architectures designed around your users, data and bandwidth."],
-    ["shield", "High Service Quality", "Consistent delivery standards, SLA discipline and quality checks on every engagement."],
-    ["truck", "On-Time Project Delivery", "Planned timelines, milestone tracking and dependable go-live schedules."],
-    ["network", "Scalable IT Infrastructure", "Future-ready designs that grow with your organisation."],
-    ["clock", "24×7 Remote Support (Available for Selected Services)", "Round-the-clock remote monitoring and assistance where your contract includes it."]
+    ["layers", "Single accountable partner", "Design, supply, deploy and support under one commercial and escalation owner — fewer hand-offs."],
+    ["globe", "Multi-site India coverage", "Delivery and break-fix support coordinated through a distributed engineer and partner network."],
+    ["badge", "OEM-aligned engineering", "Implementations led by engineers experienced on mainstream networking, security, server and AV platforms."],
+    ["clipboard", "Project governance", "Scoped SOW, milestone tracking, as-built documentation and clear acceptance criteria."],
+    ["check", "Genuine supply chain", "Warranty-backed OEM hardware via authorised channels — commercial proof shared in vendor packs."],
+    ["headset", "Defined support model", "AMC and managed services with response expectations agreed up front — including selective 24×7 remote coverage."]
   ];
 
   var products = [
     ["laptop", "Computing", ["Laptops", "Desktops", "Workstations"]],
     ["database", "Servers & Storage", ["Servers", "Storage Solutions", "Data Centre Equipment", "Racks & Accessories"]],
-    ["network", "Networking", ["Networking Products", "Enterprise Wi-Fi", "Firewalls", "Routers", "Switches", "Access Points"]],
-    ["camera", "Surveillance & Security", ["CCTV Surveillance Systems", "IP Cameras", "NVR & DVR", "Video Management Systems", "Video Door Phones", "Smart Home Security"]],
-    ["fingerprint", "Access Control", ["Biometric Attendance Systems", "Face Recognition Devices", "Access Control Systems", "Boom Barriers", "Tripod Turnstiles", "Flap Barriers", "Full Height Turnstiles", "Visitor Management Systems", "Smart Locks"]],
-    ["printer", "Office Solutions", ["Printers", "Scanners", "Barcode Printers", "POS Machines"]],
-    ["monitor", "Audio Visual", ["Interactive Flat Panels", "Digital Signage", "LED Video Walls", "Projectors", "Video Conferencing Systems", "Audio Visual Solutions"]],
-    ["battery", "Power", ["UPS Systems", "Power Backup Solutions"]]
+    ["network", "Networking", ["Enterprise Wi-Fi", "Firewalls", "Routers", "Switches", "Access Points"]],
+    ["camera", "Surveillance & Security", ["CCTV / IP Cameras", "NVR & DVR", "VMS", "Video Door Phones"]],
+    ["fingerprint", "Access Control", ["Biometrics", "Face Recognition", "Turnstiles & Barriers", "Visitor Management", "Smart Locks"]],
+    ["printer", "Office Solutions", ["Printers", "Scanners", "Barcode Printers", "POS"]],
+    ["monitor", "Audio Visual", ["IFPs", "LED Walls", "Projectors", "Video Conferencing"]],
+    ["battery", "Power", ["UPS Systems", "Power Backup"]]
   ];
 
   var services = [
-    ["layers", "Infrastructure & Networking", [
-      "IT Infrastructure Setup", "Network Design & Implementation", "Structured Cabling",
-      "Server Installation", "Firewall Configuration", "Data Centre Services",
-      "System Integration", "Virtualisation Solutions"
-    ]],
-    ["camera", "Security & Surveillance", [
-      "CCTV Installation", "Access Control Installation", "Biometric Installation",
-      "Cybersecurity Solutions", "Endpoint Security", "Network Security", "VPN Configuration"
-    ]],
-    ["cloud", "Cloud & Productivity", [
-      "Cloud Solutions", "Microsoft 365 Deployment", "Google Workspace Setup",
-      "Email Migration", "Cloud Backup"
-    ]],
-    ["database", "Backup & Continuity", [
-      "Data Backup Solutions", "Disaster Recovery Planning"
-    ]],
-    ["headset", "Support & Managed Services", [
-      "Annual Maintenance Contract (AMC)", "Facility Management Services (FMS)",
-      "Remote IT Support", "Onsite IT Support", "Managed IT Services",
-      "Helpdesk Support", "Hardware Maintenance"
-    ]],
-    ["settings", "Software & Assets", [
-      "Software Installation", "Software Licensing", "IT Asset Management"
-    ]],
-    ["briefcase", "Consulting & Procurement", [
-      "IT Consulting", "Technology Audits", "IT Procurement"
-    ]],
-    ["zap", "Smart Solutions", [
-      "IoT Solutions", "Smart Office Solutions"
-    ]]
+    ["network", "Network infrastructure", "Outcome: reliable connectivity sized for users, applications and sites.", "Topology design, switching/routing, campus Wi‑Fi, structured cabling, documentation and handover."],
+    ["lock", "Cyber & network security", "Outcome: controlled perimeter and access aligned to your policy baseline.", "Firewall deployment, VPN, endpoint security coordination, hardening guidance and change documentation."],
+    ["camera", "Physical security systems", "Outcome: integrated CCTV and access layers with operable day-2 support.", "Camera/NVR design, access control, barriers/turnstiles, commissioning and operator training."],
+    ["cloud", "Cloud & productivity", "Outcome: stable identity and collaboration platforms with clean migration.", "Microsoft 365 / Google Workspace rollout, email migration, cloud backup and tenant hygiene basics."],
+    ["database", "Data centre & continuity", "Outcome: resilient compute/storage footing and recovery planning.", "Server/storage build, rack integration, backup design and disaster-recovery planning workshops."],
+    ["headset", "Managed IT & AMC", "Outcome: predictable operations cost with a named escalation path.", "Helpdesk coordination, remote/onsite support, hardware AMC, asset tracking and OEM escalation."]
   ];
 
   var industries = [
@@ -130,37 +94,9 @@
     ["monitor", "Residential Projects"]
   ];
 
-  var values = [
-    ["heart", "Customer First"],
-    ["zap", "Innovation"],
-    ["badge", "Excellence"],
-    ["shield", "Integrity"],
-    ["globe", "Transparency"],
-    ["check", "Reliability"],
-    ["clipboard", "Accountability"],
-    ["users", "Teamwork"],
-    ["settings", "Continuous Improvement"],
-    ["layers", "Quality Commitment"]
-  ];
-
-  var commitments = [
-    ["layers", "High-Quality Products"],
-    ["check", "Genuine OEM Brands"],
-    ["wrench", "Professional Installation"],
-    ["badge", "Certified Engineers"],
-    ["zap", "Fast Service Response"],
-    ["globe", "PAN India Deployment"],
-    ["headset", "Enterprise-Level Support"],
-    ["network", "Scalable Technology"],
-    ["lock", "Secure Infrastructure"],
-    ["users", "Long-Term Partnership"]
-  ];
-
-  var partners = ["Cisco", "Dell", "HP", "Lenovo", "Fortinet", "Sophos", "Microsoft", "AWS", "Aruba", "Netgear", "D-Link", "Canon", "Epson", "Brother", "Poly", "Logitech"];
-
+  var partners = ["Cisco", "Dell", "HP", "Lenovo", "Fortinet", "Sophos", "Microsoft", "AWS", "Aruba", "Netgear", "D-Link", "Canon", "Epson", "Poly", "Logitech"];
   var clients = ["Hiranandani", "Piramal", "AU Bank", "Indian Railways", "Global Pay", "Alkem", "Hinduja", "Rizvi Foundation", "TechConnect", "Recoup Health"];
 
-  /* ---------- Render ---------- */
   function html(id, markup) {
     var el = document.getElementById(id);
     if (el) el.innerHTML = markup;
@@ -176,20 +112,12 @@
   }).join(""));
 
   html("serviceList", services.map(function (s) {
-    return '<article class="card reveal">' + icon(s[0]) + "<h3>" + s[1] + '</h3><ul class="tags">' +
-      s[2].map(function (t) { return "<li>" + t + "</li>"; }).join("") + "</ul></article>";
+    return '<article class="service-pro reveal">' + icon(s[0]) +
+      "<div><h3>" + s[1] + "</h3><p class=\"service-pro__outcome\">" + s[2] + "</p><p>" + s[3] + "</p></div></article>";
   }).join(""));
 
   html("industryGrid", industries.map(function (i) {
     return '<article class="card industry reveal">' + icon(i[0]) + "<h3>" + i[1] + "</h3></article>";
-  }).join(""));
-
-  html("valuesGrid", values.map(function (v) {
-    return '<article class="card industry reveal">' + icon(v[0]) + "<h3>" + v[1] + "</h3></article>";
-  }).join(""));
-
-  html("commitmentGrid", commitments.map(function (c) {
-    return '<article class="card industry reveal">' + icon(c[0]) + "<h3>" + c[1] + "</h3></article>";
   }).join(""));
 
   html("partnerTrack", partners.concat(partners).map(function (p) {
@@ -203,7 +131,6 @@
   var year = document.getElementById("year");
   if (year) year.textContent = new Date().getFullYear();
 
-  /* ---------- Header scroll ---------- */
   var header = document.getElementById("header");
   function onScroll() {
     header.classList.toggle("is-scrolled", window.scrollY > 16);
@@ -211,7 +138,6 @@
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
 
-  /* ---------- Mobile nav ---------- */
   var burger = document.getElementById("burger");
   var nav = document.getElementById("nav");
   var aboutDrop = document.getElementById("aboutDrop");
@@ -242,7 +168,6 @@
   if (aboutToggle && aboutDrop) {
     aboutToggle.addEventListener("click", function (e) {
       if (!isMobileNav()) return;
-      // First tap opens submenu; second tap (already open) goes to #about
       if (!aboutDrop.classList.contains("is-open")) {
         e.preventDefault();
         e.stopPropagation();
@@ -255,17 +180,11 @@
   nav.addEventListener("click", function (e) {
     var link = e.target.closest("a");
     if (!link) return;
-    // Ignore the tap that only opens the About submenu
-    if (link === aboutToggle && isMobileNav() && aboutDrop && aboutDrop.classList.contains("is-open") && e.defaultPrevented) {
-      return;
-    }
-    if (link === aboutToggle && isMobileNav() && aboutDrop && !aboutDrop.classList.contains("is-open")) {
-      return;
-    }
+    if (link === aboutToggle && isMobileNav() && aboutDrop && aboutDrop.classList.contains("is-open") && e.defaultPrevented) return;
+    if (link === aboutToggle && isMobileNav() && aboutDrop && !aboutDrop.classList.contains("is-open")) return;
     closeNav();
   });
 
-  /* ---------- Reveal on scroll ---------- */
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (en, idx) {
       if (!en.isIntersecting) return;
@@ -276,7 +195,6 @@
   }, { threshold: 0.12, rootMargin: "0px 0px -40px" });
   document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
 
-  /* ---------- Count up ---------- */
   var counters = document.querySelectorAll(".count");
   var co = new IntersectionObserver(function (entries) {
     entries.forEach(function (en) {
@@ -297,36 +215,40 @@
   }, { threshold: 0.5 });
   counters.forEach(function (el) { co.observe(el); });
 
-  /* ---------- Contact form ---------- */
   var form = document.getElementById("contactForm");
   var note = document.getElementById("formNote");
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    if (!form.checkValidity()) {
+  var submitBtn = document.getElementById("contactSubmit");
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!form.checkValidity()) {
+        note.className = "form__note";
+        note.textContent = "Please complete name, company, phone, work email and requirement summary.";
+        form.reportValidity();
+        return;
+      }
+      submitBtn.disabled = true;
       note.className = "form__note";
-      note.textContent = "Please fill in your name, phone and a valid email.";
-      form.reportValidity();
-      return;
-    }
-    var d = new FormData(form);
-    var body = [
-      "Name: " + (d.get("name") || ""),
-      "Company: " + (d.get("company") || ""),
-      "Phone: " + (d.get("phone") || ""),
-      "Email: " + (d.get("email") || ""),
-      "",
-      d.get("message") || ""
-    ].join("\n");
-    window.location.href =
-      "mailto:sales@onecallsolution.in?subject=" +
-      encodeURIComponent("Website enquiry — " + (d.get("company") || d.get("name") || "New lead")) +
-      "&body=" + encodeURIComponent(body);
-    note.className = "form__note ok";
-    note.textContent = "Thank you! Your email client is opening — or call us on +91 9113326092.";
-    form.reset();
-  });
+      note.textContent = "Sending…";
 
-  /* ---------- Remove Lovable watermark if injected ---------- */
+      fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" }
+      }).then(function (res) {
+        if (!res.ok) throw new Error("send_failed");
+        note.className = "form__note ok";
+        note.textContent = "Thank you. Your enquiry was received — we will respond on the same working day where possible. For urgent needs call +91 91133 26092.";
+        form.reset();
+      }).catch(function () {
+        note.className = "form__note";
+        note.textContent = "We could not submit automatically. Please email sales@onecallsolution.in or WhatsApp +91 91133 26092.";
+      }).finally(function () {
+        submitBtn.disabled = false;
+      });
+    });
+  }
+
   function stripLovableBadge() {
     var badge = document.getElementById("lovable-badge");
     if (badge) badge.remove();

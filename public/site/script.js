@@ -131,11 +131,13 @@
   if (year) year.textContent = new Date().getFullYear();
 
   var header = document.getElementById("header");
-  function onScroll() {
-    header.classList.toggle("is-scrolled", window.scrollY > 16);
+  if (header) {
+    function onScroll() {
+      header.classList.toggle("is-scrolled", window.scrollY > 16);
+    }
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
   }
-  onScroll();
-  window.addEventListener("scroll", onScroll, { passive: true });
 
   var burger = document.getElementById("burger");
   var nav = document.getElementById("nav");
@@ -143,6 +145,7 @@
   var aboutToggle = document.getElementById("aboutToggle");
 
   function closeNav() {
+    if (!nav || !burger) return;
     nav.classList.remove("is-open");
     burger.classList.remove("is-open");
     burger.setAttribute("aria-expanded", "false");
@@ -154,35 +157,37 @@
     return window.matchMedia("(max-width:1024px)").matches;
   }
 
-  burger.addEventListener("click", function () {
-    var open = nav.classList.toggle("is-open");
-    burger.classList.toggle("is-open", open);
-    burger.setAttribute("aria-expanded", String(open));
-    if (!open && aboutDrop) {
-      aboutDrop.classList.remove("is-open");
-      if (aboutToggle) aboutToggle.setAttribute("aria-expanded", "false");
-    }
-  });
-
-  if (aboutToggle && aboutDrop) {
-    aboutToggle.addEventListener("click", function (e) {
-      if (!isMobileNav()) return;
-      if (!aboutDrop.classList.contains("is-open")) {
-        e.preventDefault();
-        e.stopPropagation();
-        aboutDrop.classList.add("is-open");
-        aboutToggle.setAttribute("aria-expanded", "true");
+  if (burger && nav) {
+    burger.addEventListener("click", function () {
+      var open = nav.classList.toggle("is-open");
+      burger.classList.toggle("is-open", open);
+      burger.setAttribute("aria-expanded", String(open));
+      if (!open && aboutDrop) {
+        aboutDrop.classList.remove("is-open");
+        if (aboutToggle) aboutToggle.setAttribute("aria-expanded", "false");
       }
     });
-  }
 
-  nav.addEventListener("click", function (e) {
-    var link = e.target.closest("a");
-    if (!link) return;
-    if (link === aboutToggle && isMobileNav() && aboutDrop && aboutDrop.classList.contains("is-open") && e.defaultPrevented) return;
-    if (link === aboutToggle && isMobileNav() && aboutDrop && !aboutDrop.classList.contains("is-open")) return;
-    closeNav();
-  });
+    if (aboutToggle && aboutDrop) {
+      aboutToggle.addEventListener("click", function (e) {
+        if (!isMobileNav()) return;
+        if (!aboutDrop.classList.contains("is-open")) {
+          e.preventDefault();
+          e.stopPropagation();
+          aboutDrop.classList.add("is-open");
+          aboutToggle.setAttribute("aria-expanded", "true");
+        }
+      });
+    }
+
+    nav.addEventListener("click", function (e) {
+      var link = e.target.closest("a");
+      if (!link) return;
+      if (link === aboutToggle && isMobileNav() && aboutDrop && aboutDrop.classList.contains("is-open") && e.defaultPrevented) return;
+      if (link === aboutToggle && isMobileNav() && aboutDrop && !aboutDrop.classList.contains("is-open")) return;
+      closeNav();
+    });
+  }
 
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (en, idx) {
@@ -191,8 +196,12 @@
       setTimeout(function () { el.classList.add("is-in"); }, Math.min(idx * 70, 350));
       io.unobserve(el);
     });
-  }, { threshold: 0.12, rootMargin: "0px 0px -40px" });
+  }, { threshold: 0.08, rootMargin: "0px 0px -20px" });
   document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
+  // Above-the-fold: show immediately so deploy never looks "blank"
+  document.querySelectorAll(".hero .reveal, .photo-strip .reveal").forEach(function (el) {
+    el.classList.add("is-in");
+  });
 
   var counters = document.querySelectorAll(".count");
   var co = new IntersectionObserver(function (entries) {

@@ -1,9 +1,6 @@
 /**
  * Production static server for Onecall Solution (PM2).
- * Serves public/site as the domain root so relative assets
- * (styles.css, img/*, script.js) resolve at https://domain/...
- *
- * Run `npm run build` before starting.
+ * Serves public/site directly (no vite build required for the marketing site).
  */
 import http from "node:http";
 import fs from "node:fs";
@@ -11,8 +8,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const BUILD_PUBLIC = path.join(__dirname, ".output", "public");
-const SITE_DIR = path.join(BUILD_PUBLIC, "site");
+const SITE_DIR = path.join(__dirname, "public", "site");
 const PORT = Number(process.env.PORT || 3016);
 const HOST = process.env.HOST || "0.0.0.0";
 
@@ -57,36 +53,39 @@ function resolveFile(urlPath) {
   let pathname = decodeURIComponent((urlPath || "/").split("?")[0]);
   if (pathname === "/") pathname = "/index.html";
 
-  // Prefer site root so /styles.css and /img/* work at the domain root
   let file = tryFile(SITE_DIR, pathname);
   if (file) return file;
 
-  // Back-compat: /site/... still works
   if (pathname === "/site" || pathname === "/site/") {
     return tryFile(SITE_DIR, "/index.html");
   }
   if (pathname.startsWith("/site/")) {
-    file = tryFile(SITE_DIR, pathname.slice("/site".length));
-    if (file) return file;
+    return tryFile(SITE_DIR, pathname.slice("/site".length));
   }
+  return null;
+}
 
-  // React build assets / favicon from .output/public
-  return tryFile(BUILD_PUBLIC, pathname);
+function cacheHeaders(filePath) {
+  const ext = path.extname(filePath).toLowerCase();
+  if (ext === ".html") {
+    return { "Cache-Control": "no-cache" };
+  }
+  if (ext === ".css" || ext === ".js") {
+    return { "Cache-Control": "public, max-age=300" };
+  }
+  return { "Cache-Control": "public, max-age=86400" };
 }
 
 if (!fs.existsSync(SITE_DIR)) {
-  console.error(`[onecall] Missing ${SITE_DIR}. Run: npm run build`);
+  console.error(`[onecall] Missing ${SITE_DIR}`);
 }
 
 const server = http.createServer((req, res) => {
   try {
     if (!fs.existsSync(SITE_DIR)) {
-      return send(
-        res,
-        503,
-        "App build missing. Run: npm run build",
-        { "Content-Type": "text/plain; charset=utf-8" },
-      );
+      return send(res, 503, "Site folder missing.", {
+        "Content-Type": "text/plain; charset=utf-8",
+      });
     }
 
     const filePath = resolveFile(req.url || "/");
@@ -101,7 +100,7 @@ const server = http.createServer((req, res) => {
     return send(res, 200, body, {
       "Content-Type": type,
       "Content-Length": body.length,
-      "Cache-Control": path.extname(filePath) === ".html" ? "no-cache" : "public, max-age=86400",
+      ...cacheHeaders(filePath),
     });
   } catch (error) {
     console.error(error);
@@ -112,5 +111,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, HOST, () => {
-  console.log(`[onecall] production listening on http://${HOST}:${PORT}`);
+  console.log(`[onecall] serving ${SITE_DIR} on http://${HOST}:${PORT}`);
 });

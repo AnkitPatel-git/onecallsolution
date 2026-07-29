@@ -275,13 +275,14 @@ input:focus,textarea:focus{border-color:var(--lime);box-shadow:0 0 0 3px rgba(21
 .legal a{color:var(--navy);font-weight:600;text-decoration:underline}
 .legal__updated{font-size:.85rem;color:var(--muted);margin-bottom:1.2rem}
 
-/* Reveal */
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
-.reveal--left{transform:translateX(-32px)}
-.reveal--right{transform:translateX(32px)}
-.reveal.is-in{opacity:1;transform:none}
+/* Reveal — visible by default; JS only enhances animation */
+.reveal{opacity:1;transform:none}
+html.js .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+html.js .reveal--left{transform:translateX(-32px)}
+html.js .reveal--right{transform:translateX(32px)}
+html.js .reveal.is-in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
-  .reveal{opacity:1;transform:none;transition:none}
+  .reveal,html.js .reveal{opacity:1;transform:none;transition:none}
   .float-card,.marquee__track{animation:none}
   html{scroll-behavior:auto}
 }

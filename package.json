@@ -8,7 +8,12 @@
     "build": "NITRO_PRESET=node-server vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
-    "start": "node app.js",
+    "start": "NODE_ENV=production PORT=3015 node app.js",
+    "pm2:start": "pm2 start ecosystem.config.cjs",
+    "pm2:stop": "pm2 stop onecallsolution",
+    "pm2:restart": "pm2 restart onecallsolution",
+    "pm2:logs": "pm2 logs onecallsolution",
+    "pm2:delete": "pm2 delete onecallsolution",
     "lint": "eslint .",
     "format": "prettier --write ."
   },

@@ -1,22 +1,16 @@
 /**
- * cPanel / Phusion Passenger startup file.
- * Serves the production build from .output/public (full source stays on disk).
- *
- * Required: npm run build  (creates .output/public)
- * Restart the Node app in cPanel after every deploy.
+ * Production static server for Onecall Solution (PM2).
+ * Serves .output/public — run `npm run build` before starting.
  */
 import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-/* global PhusionPassenger */
-if (typeof PhusionPassenger !== "undefined") {
-  PhusionPassenger.configure({ autoInstall: false });
-}
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.join(__dirname, ".output", "public");
+const PORT = Number(process.env.PORT || 3015);
+const HOST = process.env.HOST || "0.0.0.0";
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -59,9 +53,7 @@ function resolveFile(urlPath) {
 }
 
 if (!fs.existsSync(PUBLIC_DIR)) {
-  console.error(
-    `[onecall] Missing ${PUBLIC_DIR}. Run: npm run build`,
-  );
+  console.error(`[onecall] Missing ${PUBLIC_DIR}. Run: npm run build`);
 }
 
 const server = http.createServer((req, res) => {
@@ -70,7 +62,7 @@ const server = http.createServer((req, res) => {
       return send(
         res,
         503,
-        "App build missing. SSH in and run: cd ~/onecallsolution && npm run build",
+        "App build missing. Run: npm run build",
         { "Content-Type": "text/plain; charset=utf-8" },
       );
     }
@@ -97,14 +89,6 @@ const server = http.createServer((req, res) => {
   }
 });
 
-const isPassenger = typeof PhusionPassenger !== "undefined";
-const port = process.env.PORT || process.env.NITRO_PORT || 3000;
-
-if (isPassenger) {
-  // Classic cPanel Passenger socket — required or Apache returns 403/502
-  server.listen("passenger");
-} else {
-  server.listen(port, () => {
-    console.log(`[onecall] listening on http://127.0.0.1:${port}`);
-  });
-}
+server.listen(PORT, HOST, () => {
+  console.log(`[onecall] production listening on http://${HOST}:${PORT}`);
+});

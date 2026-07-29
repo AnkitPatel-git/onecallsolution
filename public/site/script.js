@@ -214,17 +214,55 @@
   /* ---------- Mobile nav ---------- */
   var burger = document.getElementById("burger");
   var nav = document.getElementById("nav");
+  var aboutDrop = document.getElementById("aboutDrop");
+  var aboutToggle = document.getElementById("aboutToggle");
+
+  function closeNav() {
+    nav.classList.remove("is-open");
+    burger.classList.remove("is-open");
+    burger.setAttribute("aria-expanded", "false");
+    if (aboutDrop) aboutDrop.classList.remove("is-open");
+    if (aboutToggle) aboutToggle.setAttribute("aria-expanded", "false");
+  }
+
+  function isMobileNav() {
+    return window.matchMedia("(max-width:1024px)").matches;
+  }
+
   burger.addEventListener("click", function () {
     var open = nav.classList.toggle("is-open");
     burger.classList.toggle("is-open", open);
     burger.setAttribute("aria-expanded", String(open));
-  });
-  nav.addEventListener("click", function (e) {
-    if (e.target.tagName === "A") {
-      nav.classList.remove("is-open");
-      burger.classList.remove("is-open");
-      burger.setAttribute("aria-expanded", "false");
+    if (!open && aboutDrop) {
+      aboutDrop.classList.remove("is-open");
+      if (aboutToggle) aboutToggle.setAttribute("aria-expanded", "false");
     }
+  });
+
+  if (aboutToggle && aboutDrop) {
+    aboutToggle.addEventListener("click", function (e) {
+      if (!isMobileNav()) return;
+      // First tap opens submenu; second tap (already open) goes to #about
+      if (!aboutDrop.classList.contains("is-open")) {
+        e.preventDefault();
+        e.stopPropagation();
+        aboutDrop.classList.add("is-open");
+        aboutToggle.setAttribute("aria-expanded", "true");
+      }
+    });
+  }
+
+  nav.addEventListener("click", function (e) {
+    var link = e.target.closest("a");
+    if (!link) return;
+    // Ignore the tap that only opens the About submenu
+    if (link === aboutToggle && isMobileNav() && aboutDrop && aboutDrop.classList.contains("is-open") && e.defaultPrevented) {
+      return;
+    }
+    if (link === aboutToggle && isMobileNav() && aboutDrop && !aboutDrop.classList.contains("is-open")) {
+      return;
+    }
+    closeNav();
   });
 
   /* ---------- Reveal on scroll ---------- */

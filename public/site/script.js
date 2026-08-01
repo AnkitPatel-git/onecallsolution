@@ -246,11 +246,11 @@
       }).then(function (res) {
         if (!res.ok) throw new Error("send_failed");
         note.className = "form__note ok";
-        note.textContent = "Thank you. Your enquiry was received — we will respond on the same working day where possible. For urgent needs call +91 91133 26092.";
+        note.textContent = "Thank you. Your enquiry was received — we will respond on the same working day where possible. For urgent needs call +91 91753 01655.";
         form.reset();
       }).catch(function () {
         note.className = "form__note";
-        note.textContent = "We could not submit automatically. Please email sales@onecallsolution.in or WhatsApp +91 91133 26092.";
+        note.textContent = "We could not submit automatically. Please email info@onecallsolution.in or WhatsApp +91 91753 01655.";
       }).finally(function () {
         submitBtn.disabled = false;
       });

@@ -9,7 +9,6 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SITE_DIR = path.join(__dirname, "public", "site");
-const PUBLIC_DIR = path.join(__dirname, "public");
 const PORT = Number(process.env.PORT || 3016);
 const HOST = process.env.HOST || "0.0.0.0";
 
@@ -53,12 +52,6 @@ function tryFile(rootDir, pathname) {
 function resolveFile(urlPath) {
   let pathname = decodeURIComponent((urlPath || "/").split("?")[0]);
   if (pathname === "/") pathname = "/index.html";
-
-  // Root public assets (logo, favicon) outside site/
-  if (pathname === "/logo.png" || pathname === "/favicon.ico" || pathname === "/robots.txt") {
-    const pub = tryFile(PUBLIC_DIR, pathname);
-    if (pub) return pub;
-  }
 
   let file = tryFile(SITE_DIR, pathname);
   if (file) return file;

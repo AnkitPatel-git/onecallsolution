@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 56" role="img" aria-label="Recoup Health">
+  <title>Recoup Health</title>
+  <rect width="220" height="56" rx="8" fill="#0B6E4F"/>
+  <circle cx="28" cy="28" r="12" fill="#7CFFCB"/>
+  <path d="M22 28h12M28 22v12" stroke="#0B6E4F" stroke-width="2.5" stroke-linecap="round"/>
+  <text x="52" y="26" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF">Recoup</text>
+  <text x="52" y="42" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="500" fill="#B8F5DC">Health</text>
+</svg>

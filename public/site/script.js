@@ -111,7 +111,18 @@
     ["Poly", "img/platforms/poly.svg"],
     ["Logitech", "img/platforms/logitech.svg"]
   ];
-  var clients = ["Hiranandani", "Piramal", "AU Bank", "Indian Railways", "Global Pay", "Alkem", "Hinduja", "Rizvi Foundation", "TechConnect", "Recoup Health"];
+  var clients = [
+    ["Hiranandani", "img/clients/hiranandani.png"],
+    ["Piramal", "img/clients/piramal.png"],
+    ["AU Bank", "img/clients/aubank.png"],
+    ["Indian Railways", "img/clients/railways.png"],
+    ["Global Pay", "img/clients/globalpay.png"],
+    ["Alkem", "img/clients/alkem.png"],
+    ["Hinduja", "img/clients/hinduja.png"],
+    ["Rizvi Foundation", "img/clients/rizvi.png"],
+    ["TechConnect", "img/clients/techconnect.svg"],
+    ["Recoup Health", "img/clients/recoup.svg"]
+  ];
 
   function html(id, markup) {
     var el = document.getElementById(id);
@@ -140,7 +151,7 @@
   }).join(""));
 
   html("clientGrid", clients.map(function (c) {
-    return '<div class="client reveal">' + c + "</div>";
+    return '<div class="client reveal" title="' + c[0] + '"><img src="' + c[1] + '" alt="' + c[0] + '" width="140" height="64" loading="lazy" /></div>';
   }).join(""));
 
   var year = document.getElementById("year");

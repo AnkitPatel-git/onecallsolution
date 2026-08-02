@@ -94,7 +94,23 @@
     ["monitor", "Residential Projects"]
   ];
 
-  var partners = ["Cisco", "Dell", "HP", "Lenovo", "Fortinet", "Sophos", "Microsoft", "AWS", "Aruba", "Netgear", "D-Link", "Canon", "Epson", "Poly", "Logitech"];
+  var partners = [
+    ["Cisco", "img/platforms/cisco.svg"],
+    ["Dell", "img/platforms/dell.svg"],
+    ["HP", "img/platforms/hp.svg"],
+    ["Lenovo", "img/platforms/lenovo.svg"],
+    ["Fortinet", "img/platforms/fortinet.svg"],
+    ["Sophos", "img/platforms/sophos.svg"],
+    ["Microsoft", "img/platforms/microsoft.svg"],
+    ["AWS", "img/platforms/aws.svg"],
+    ["Aruba", "img/platforms/aruba.svg"],
+    ["Netgear", "img/platforms/netgear.svg"],
+    ["D-Link", "img/platforms/dlink.svg"],
+    ["Canon", "img/platforms/canon.svg"],
+    ["Epson", "img/platforms/epson.svg"],
+    ["Poly", "img/platforms/poly.svg"],
+    ["Logitech", "img/platforms/logitech.svg"]
+  ];
   var clients = ["Hiranandani", "Piramal", "AU Bank", "Indian Railways", "Global Pay", "Alkem", "Hinduja", "Rizvi Foundation", "TechConnect", "Recoup Health"];
 
   function html(id, markup) {
@@ -120,7 +136,7 @@
   }).join(""));
 
   html("partnerTrack", partners.concat(partners).map(function (p) {
-    return '<div class="logo-chip">' + p + "</div>";
+    return '<div class="logo-chip" title="' + p[0] + '"><img src="' + p[1] + '" alt="' + p[0] + '" width="120" height="40" loading="lazy" /></div>';
   }).join(""));
 
   html("clientGrid", clients.map(function (c) {

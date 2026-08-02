@@ -221,8 +221,9 @@ p{margin:0 0 1rem}
 .marquee__track{display:flex;gap:18px;width:max-content;animation:scroll 38s linear infinite}
 .marquee:hover .marquee__track{animation-play-state:paused}
 @keyframes scroll{to{transform:translateX(-50%)}}
-.logo-chip{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-sm);padding:18px 30px;font-weight:700;font-size:1rem;letter-spacing:.02em;color:#8A93A6;filter:grayscale(1);transition:color .3s ease,transform .3s ease;white-space:nowrap}
-.logo-chip:hover{color:var(--navy);transform:translateY(-3px)}
+.logo-chip{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px 28px;display:grid;place-items:center;min-width:148px;min-height:76px;filter:grayscale(1);opacity:.78;transition:filter .3s ease,opacity .3s ease,transform .3s ease,box-shadow .3s ease}
+.logo-chip img{display:block;width:auto;max-width:118px;height:36px;object-fit:contain}
+.logo-chip:hover{filter:grayscale(0);opacity:1;transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,64,.08)}
 
 /* Clients */
 .clients{display:grid;grid-template-columns:repeat(5,1fr);gap:18px}
